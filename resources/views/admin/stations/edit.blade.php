@@ -6,7 +6,7 @@ New Ships
 
 @section("content")
 <x-layout heading="Update Station Info">
-    <form action="{{ route('admin.stations.edit',$station->id) }}" enctype="multipart/form-data" method="post">
+    <form action="{{ route('admin.stations.update',$station->id) }}" enctype="multipart/form-data" method="post">
         @csrf
         @method("PUT")
         <div class="card">

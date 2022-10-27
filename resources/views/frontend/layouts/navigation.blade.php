@@ -1,4 +1,4 @@
-<header class="header row sticky-top">
+<header class="header row sticky-top" style="padding:0px !important">
     <!-- <div class=" d-flex justify-content-center align-items-center">
       <img src="{{ asset('frontend/images/global/logo.png') }}" width="150px" />
     </div> -->
@@ -21,9 +21,6 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item nav-text" href="#">Sign In</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item nav-text" href="#">Register</a>
                                 </li>
                             </ul>
                         </li>
@@ -61,11 +58,8 @@
         </nav>
     </div>
     @guest
-    @if(settings("login") || settings("signup"))
     <div class="col-6 col-md-3">
-        <div class="d-flex align-items-center justify-content-end me-5">
-            <a href="#" class="control-search"><i class="fas fa-search"></i></a>
-            <hr class="hr-1" />
+        <div class="d-flex align-items-center justify-content-end me-5 mt-3">
             <div class="login-register text-white">
                 @if(settings("login"))
                 <span class="box-icon">
@@ -82,13 +76,9 @@
             </div>
         </div>
     </div>
-    @endif
-    @endguest
-    @auth
+    @else
     <div class="col-6 col-md-3">
-        <div class="d-flex align-items-center justify-content-end me-5">
-            <a href="#" class="control-search"><i class="fas fa-search"></i></a>
-            <hr class="hr-1" />
+        <div class="d-flex align-items-center justify-content-end me-5 mt-3">
             <div class="login-register text-white">
                 <form style="display:inline" method="post" action="{{ route('logout') }}">
                     @csrf
@@ -104,6 +94,6 @@
             </div>
         </div>
     </div>
+    @endguest
 
-    @endauth
 </header>

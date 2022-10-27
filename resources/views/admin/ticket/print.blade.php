@@ -1,39 +1,177 @@
-@extends("themes.admin.master")
+@extends("themes.frontend.master")
 
-@section("title")
-Print Ticket
+@section("page_title")
+::Register
 @endsection
 
-@section("content")
-<x-layout class="d-print-none" heading="Ticket Success, Print Ticket">
-    <form action="" enctype="multipart/form-data" method="post">
-        @csrf
-        <div class="card">
-            <div class="card-body">
-                <div class="row d-print-none">
-                    <div class="col-md-12">
-                        <x-alert></x-alert>
-                    </div>
-                    <div class="col-md-12">
-                        <button onclick="window.print()" type="button" class="btn btn-success w-100">
-                            PRINT TICKET
-                        </button>
-                    </div>
-                </div>
+@push("custom_css")
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<style type="text/css">
+    p {
+        font-family: 'Inter', sans-serif !important;
+    }
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <iframe id="print_area" class="w-100" style="min-height:400px;" src="{{ route('admin.ticket.print',$ticket->uuid) }}" title="print-ticket" </iframe>
-                    </div>
+    .social-login {
+        font-family: 'Inter'sans-serif !important;
+        font-weight: 600;
+        color: #03014C !important
+    }
 
-                </div>
-            </div>
-        </div>
-    </form>
-</x-layout>
-@endsection
+    label {
+        font-family: 'Inter';
+        font-weight: 400;
+        line-height: 23px;
+        font-size: 19px;
+    }
 
-@push("plugin_css")
+    .dynamic-padding {
+        padding-left: 80px !important;
+        /* padding-right: 20px !important; */
+    }
+
+    input {
+        box-shadow: none;
+        font-family: "Inter";
+
+
+    }
+
+    .next {
+        background: #242254;
+        color: #fff;
+    }
+
+    /* .active-bar {
+        background: #fff;
+        min-height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        border: 2px solid red;
+        max-width: 30px;
+        margin-top: 78px;
+    } */
+    .active-circle {
+        background: #fff !important;
+        color: #fff !important;
+        border: 2px solid red !important;
+    }
+
+    .active-text {
+        color: #fff !important;
+    }
+
+    .active-line {
+        background: #fff !important;
+        color: #fff !important;
+
+    }
+
+    .information {
+        font-size: 19px;
+        color: #fff;
+        font-family: 'Inter';
+        line-height: 24px;
+        margin-top: 15px;
+        margin-left: 6px;
+    }
+
+    .information-line {
+        min-width: 1px;
+        min-height: 32px;
+        background: #fff;
+        max-width: 1px;
+        margin-left: 19px;
+        margin-top: 10px
+    }
+
+    .information-circle-disabled {
+        background: transparent;
+        min-height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        border: 2px solid #6076D1;
+        max-width: 30px;
+        margin-top: 15px;
+    }
+
+    .information-circle-disabled:first {
+        background: transparent;
+        min-height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        border: 2px solid #6076D1;
+        max-width: 30px;
+        margin-top: 15px;
+    }
+
+    .done {}
+
+    .first {
+        margin-top: 75px;
+    }
+
+    .information-disabled {
+        font-size: 19px;
+        color: #6076D1;
+        font-family: 'Inter';
+        line-height: 24px;
+        margin-top: 15px;
+        margin-left: 6px;
+    }
+
+    .information-line-disabled {
+        min-width: 1px;
+        min-height: 32px;
+        background: #6076D1;
+        max-width: 1px;
+        margin-left: 19px;
+        margin-top: 10px
+    }
+
+    .progress-title {
+        text-align: left;
+        color: #fff;
+        font-size: 23px;
+        font-family: 'Inter';
+        line-height: 28px;
+        margin-left: 0px;
+        padding-left: 0px;
+        margin-top: 0px;
+        padding-top: 0px;
+    }
+
+    .progress-title>h5 {
+        color: #fff !important;
+        font-family: 'Inter' !important;
+    }
+
+    .steps {
+        font-size: 14px;
+        font-family: 'Inter';
+        color: #B5CCEC;
+        line-height: 17px;
+    }
+
+    .signup-progress-bar {
+        margin-top: 175px;
+        text-align: left;
+
+    }
+
+    .steps>p {
+        font-size: 14px !important;
+        font-family: "Inter";
+    }
+
+    @media only screen and (max-width: 600px) {
+        .dynamic-padding {
+            padding-left: 10px !important;
+            /* padding-right: 10px !important; */
+        }
+    }
+</style>
 <style type="text/css">
     @media print {
         body * {
@@ -47,4 +185,43 @@ Print Ticket
 
     }
 </style>
+@endpush
+
+@section("content")
+
+<div class="container  mb-11 mx-auto px-0">
+    <div class="row px-0 mx-auto">
+        <!-- Row -->
+        <div class="col-md-12 pl-0 ml-0 mx-auto step-parent pb-5">
+            <!-- Step Zero -->
+
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="bg-white pt-3 ps-5 dynamic-padding" style="height:100%">
+                        <h4 class="mb-0 text-center" style="color: red !important;font-weight:700;line-height:42px;">Click 'Print Ticket' to get your ticket</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form action="" enctype="multipart/form-data" method="post">
+                @csrf
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <iframe id="print_area" class="w-100" style="min-height:500px;" src="{{ route('admin.ticket.print',$ticket->uuid) }}" title="print-ticket" </iframe>
+                    </div>
+
+                </div>
+            </form>
+            <!-- / Form -->
+        </div>
+
+    </div>
+</div>
+@endsection
+
+@push("custom_scripts")
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('captcha.google.site_key') }}"></script>
+
 @endpush

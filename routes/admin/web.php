@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\Post\PostController;
 use App\Http\Controllers\Admin\ShipController;
 use App\Http\Controllers\Admin\StationController;
+use App\Http\Controllers\Admin\Ticket\SeatController;
 use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\BookUploadController;
 use App\Http\Controllers\Admin\UserController;
@@ -36,12 +37,16 @@ Route::prefix("upschool/admin")
             ->name('ticket.')
             ->controller(TicketController::class)
             ->group(function () {
+                Route::get("check-in", 'checkInCreate')->name("check_in_ticket");
+                Route::post("check-in", 'checkTicket')->name("check_in_ticket");
                 Route::get('/new', "create")->name("create");
-                Route::get('/print/{ticket:uuid}', "printableTicket")->name("print");
+                Route::get('/print/{ticket}', "printableTicket")->name("print");
                 Route::get("/search", "search")->name('search');
                 Route::post("/new", "store")->name("store");
             });
 
+        Route::get("/seat/ticket-price/", [SeatController::class, "ticketPrice"])->name('seat.price');
+        Route::resource('seat', SeatController::class);
         /**
          * Ships
          */
@@ -52,9 +57,7 @@ Route::prefix("upschool/admin")
         /**
          * Station
          */
-        Route::prefix("stations")
-            // ->middleware()
-            ->resource("stations", StationController::class);
+        Route::resource("stations", StationController::class);
 
         Route::prefix("website/setting")
             ->name('web.setting.')

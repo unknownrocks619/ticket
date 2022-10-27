@@ -1,216 +1,356 @@
-<style type="text/css">
-    @import url('https://fonts.googleapis.com/css?family=Oswald');
+<!DOCTYPE html>
+<html lang="en">
 
-    * {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        box-sizing: border-box
-    }
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
+<?php
+$client_copy = "CUSTOMER COPY";
+$office_copy = "OFFICE COPY";
+$notice = "Reporting time 60 minutes before departure";
+$boarding_copy = "BOARDING COPY";
+?>
+<div class="row d-print-none">
+    <div class="col-md-12">
+        <x-alert></x-alert>
+    </div>
+    <div class="col-md-12">
+        <button onclick="window.print()" type="button" class="btn btn-success w-100">
+            PRINT TICKET
+        </button>
+    </div>
+</div>
 
-    body {
-        background-color: #dadde6;
-        font-family: arial
-    }
+<body class="bg-light">
+    <div class="row bg-white">
 
-    .fl-left {
-        float: left
-    }
+        <!-- Office Copy -->
+        <div class="col-md-3 mx-0 px-0">
+            <div class="card border-none" style="border:none">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 border-end text-center">
+                            <h6 class="text-center mb-0">
+                                {{ settings("website_name") }}
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8" style="font-size:12px !important;">
+                                <p class="mt-0 mb-0">{{ settings('company_address') }}</p>
+                                <p class="mt-0 mb-0">
+                                    {{ settings('main_contact') }}
+                                </p>
+                                <p>
+                                    {{ settings('official_email') }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 border" id="qrCodeCustomer">
 
-    .fl-right {
-        float: right
-    }
-
-    h1 {
-        text-transform: uppercase;
-        font-weight: 900;
-        border-left: 10px solid #fec500;
-        padding-left: 10px;
-        margin-bottom: 30px
-    }
-
-    .row {
-        overflow: hidden
-    }
-
-    .card {
-        display: table-row;
-        width: 49%;
-        background-color: #fff;
-        color: #989898;
-        margin-bottom: 10px;
-        font-family: 'Oswald', sans-serif;
-        text-transform: uppercase;
-        border-radius: 4px;
-        position: relative
-    }
-
-    .card+.card {
-        margin-left: 2%
-    }
-
-    .date {
-        display: table-cell;
-        width: 25%;
-        position: relative;
-        text-align: center;
-        border-right: 2px dashed #dadde6
-    }
-
-    .date:before,
-    .date:after {
-        content: "";
-        display: block;
-        width: 30px;
-        height: 30px;
-        background-color: #DADDE6;
-        position: absolute;
-        top: -15px;
-        right: -15px;
-        z-index: 1;
-        border-radius: 50%
-    }
-
-    .date:after {
-        top: auto;
-        bottom: -15px
-    }
-
-    .date time {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%)
-    }
-
-    .date time span {
-        display: block
-    }
-
-    .date time span:first-child {
-        color: #2b2b2b;
-        font-weight: 600;
-        font-size: 250%
-    }
-
-    .date time span:last-child {
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-top: -10px
-    }
-
-    .card-cont {
-        display: table-cell;
-        width: 75%;
-        font-size: 85%;
-        padding: 10px 10px 30px 50px
-    }
-
-    .card-cont h3 {
-        color: #3C3C3C;
-        font-size: 130%
-    }
-
-    .row:last-child .card:last-of-type .card-cont h3 {
-        /* text-decoration: line-through */
-    }
-
-    .card-cont>div {
-        display: table-row
-    }
-
-    .card-cont .even-date i,
-    .card-cont .even-info i,
-    .card-cont .even-date time,
-    .card-cont .even-info p {
-        display: table-cell
-    }
-
-    .card-cont .even-date i,
-    .card-cont .even-info i {
-        padding: 5% 5% 0 0
-    }
-
-    .card-cont .even-info p {
-        padding: 30px 50px 0 0
-    }
-
-    .card-cont .even-date time span {
-        display: block
-    }
-
-    .card-cont a {
-        display: block;
-        text-decoration: none;
-        width: 80px;
-        height: 30px;
-        background-color: #D8DDE0;
-        color: #fff;
-        text-align: center;
-        line-height: 30px;
-        border-radius: 2px;
-        position: absolute;
-        right: 10px;
-        bottom: 10px
-    }
-
-    .row:last-child .card:first-child .card-cont a {
-        background-color: #037FDD
-    }
-
-    .row:last-child .card:last-child .card-cont a {
-        background-color: #F8504C
-    }
-
-    @media screen and (max-width: 860px) {
-        .card {
-            display: block;
-            float: none;
-            width: 100%;
-            margin-bottom: 10px
-        }
-
-        .card+.card {
-            margin-left: 0
-        }
-
-        .card-cont .even-date,
-        .card-cont .even-info {
-            font-size: 75%
-        }
-    }
-</style>
-
-<section class="container">
-    @for ($i = 1 ; $i <= 2; $i++) <div class="row mx-2" style="border-bottom: 2px dotted #ccc">
-        <article class="card fl-left">
-            <section class="date">
-                <time datetime="23th feb">
-                    <span>{{ date('d',strtotime($ticket->departure_date)) }}</span><span>{{ date('M', strtotime($ticket->departure_date)) }}</span>
-                </time>
-            </section>
-            <section class="card-cont">
-                <small>{{ $ticket->passport_number }}</small>
-                <h3>{{ $ticket->first_name }} {{ $ticket->last_name }}</h3>
-                <div class="even-date">
-                    <i class="fa fa-calendar"></i>
-                    <time>
-                        <span>Departure Date: {{ date("Y-m-d",strtotime($ticket->departure_date)) }}</span>
-                        <span>Departure Time: {{ date("H:i A", strtotime($ticket->departure_date)) }}</span>
-                    </time>
+                            </div>
+                        </div>
+                        <p class="mb-0 fs-5 text-center">
+                            <strong>{{ $office_copy }}</strong>
+                        </p>
+                        <p class="text-start mt-0 ps-2 text-muted" style="font-size:12px ;">
+                            {{ $notice }}
+                        </p>
+                    </div>
+                    <div class="ps-2 text-start border-bottom my-2">
+                        <h6>
+                            Ticket Number : {{ $ticket->serial_number }}
+                        </h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>
+                                Name
+                            </h6>
+                        </div>
+                        <div class="col-md-8 text-end" style="border-bottom: 2px dotted">
+                            {{ $ticket->first_name }} {{ $ticket->last_name }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>
+                                Nationality
+                            </h6>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            {{ $ticket->country }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            Date :
+                        </div>
+                        <div class="col-md-9 text-end">
+                            {{ $ticket->departure_date }}
+                        </div>
+                    </div>
                 </div>
-                <div class="even-info">
-                    <i class="fa fa-map-marker"></i>
-                    <p>
-                        {{ $ticket->station->station_name }} | {{ $ticket->serial_number }}
-                    </p>
+                <div class="col-md-9">
                 </div>
-            </section>
-        </article>
-
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-md-6">
+                            Ticket Price
+                        </div>
+                        <div class="col-md-6 text-end">
+                            TZS {{ $ticket->price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        @endfor
-</section>
+
+        <!-- Customer Copy -->
+        <div class="col-md-3 mx-0 px-0">
+            <div class="card border-none" style="border:none">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 border-end text-center">
+                            <h6 class="text-center mb-0 w-100">
+                                {{ settings("website_name") }}
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center" style="font-size:12px !important;">
+                                <p class="mt-0 mb-0">{{ settings('company_address') }}</p>
+                                <p class="mt-0 mb-0">
+                                    {{ settings('main_contact') }}
+                                </p>
+                                <p>
+                                    {{ settings('official_email') }}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="mb-0 fs-5 text-center">
+                            <strong>{{ $client_copy }}</strong>
+                        </p>
+                        <p class="text-start mt-0 ps-2 text-muted" style="font-size:12px;">
+                            {{ $notice }}
+                        </p>
+                    </div>
+                    <div class="ps-2 text-start border-bottom my-2 mb-1">
+                        <h6>
+                            Ticket Number : {{ $ticket->serial_number }}
+                        </h6>
+                    </div>
+                    <div class="row mt-0">
+                        <div class="col-md-4">
+                            <h6>
+                                Name
+                            </h6>
+                        </div>
+                        <div class="col-md-8 text-end" style="border-bottom: 2px dotted">
+                            {{ $ticket->first_name }} {{ $ticket->last_name }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>
+                                Nationality
+                            </h6>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            {{ $ticket->country }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            Date :
+                        </div>
+                        <div class="col-md-9 text-end">
+                            {{ $ticket->departure_date }}
+                        </div>
+
+                        <div class="col-md-3">
+                            Time
+                        </div>
+                        <div class="col-md-9 text-end">
+                            <time datetime="{{ $ticket->departure_date }} 12:00 PM">12 : 00 PM</time>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-md-6">
+                            Ticket Price
+                        </div>
+                        <div class="col-md-6 text-end">
+                            TZS {{ $ticket->price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terms and Condition -->
+        <div class="col-md-3 mx-0 px-0">
+            <div class="card mx-0 px-0 border-none" style="border:none">
+                <div class="card-body mx-0 px-3 pb-0">
+                    <h6>
+                        Terms of Contract:
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-12" style="font-size:7px;">
+                            <ol>
+                                <li>
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                </li>
+                                <li>
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                </li>
+                                <li>
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                    <ol start="a">
+                                        <li>
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                        </li>
+                                        <li>
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                        </li>
+                                        <li>
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                        </li>
+                                        <li>
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                        </li>
+                                        <li>
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                            The quick brown fox jumps over a lazy dog.The quick brown fox jumps over a lazy dog.
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Boarding Copy -->
+
+        <div class="col-md-3 mx-0 px-0">
+            <div class="card border-none" style="border:none;">
+                <div class="card-body border-none">
+                    <div class="row">
+                        <div class="col-md-12 border-end text-center">
+                            <h6 class="text-center mb-0">
+                                {{ settings("website_name") }}
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8" style="font-size:12px !important;">
+                                <p class="mt-0 mb-0">{{ settings('company_address') }}</p>
+                                <p class="mt-0 mb-0">
+                                    {{ settings('main_contact') }}
+                                </p>
+                                <p>
+                                    {{ settings('official_email') }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 border px-0 mx-0" id="qrCodeOffice">
+
+                            </div>
+                        </div>
+                        <p class="mb-0 fs-5 text-center">
+                            <strong>{{ $boarding_copy }}</strong>
+                        </p>
+                        <p class="text-start mt-0 ps-2 text-muted" style="font-size:12px ;">
+                            {{ $notice }}
+                        </p>
+                    </div>
+                    <div class="ps-2 text-start border-bottom my-2">
+                        <h6>
+                            Ticket Number : {{ $ticket->serial_number }}
+                        </h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>
+                                Name
+                            </h6>
+                        </div>
+                        <div class="col-md-8 text-end" style="border-bottom: 2px dotted">
+                            {{ $ticket->first_name }} {{ $ticket->last_name }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>
+                                Nationality
+                            </h6>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            {{ $ticket->country }}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            Date :
+                        </div>
+                        <div class="col-md-9 text-end">
+                            {{ $ticket->departure_date }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                </div>
+                <div class="card-footer border-none bg-white">
+                    <div class="row">
+                        <div class="col-md-6">
+                            Ticket Price
+                        </div>
+                        <div class="col-md-6 text-end">
+                            TZS {{ $ticket->price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="{{ asset('admin/assets/js/qrcode.min.js') }}"></script>
+    <script type="text/javascript">
+        var qrElem = document.getElementById("qrCodeOffice");
+        var qrElemCustomer = document.getElementById("qrCodeCustomer");
+        var qrcode = new QRCode(qrElem, {
+            text: "{{ $ticket->uuid }}",
+            width: 80,
+            height: 80,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        var qrcodeOffice = new QRCode(qrElemCustomer, {
+            text: "{{ $ticket->uuid }}",
+            width: 80,
+            height: 80,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+
+</html>

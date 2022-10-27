@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Ticket;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Seat;
 use App\Models\Ship;
 use App\Models\Station;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class TicketController extends Controller
     {
         $ships = Ship::get();
         $stations = Station::get();
-        return view('admin.ticket.create', compact("ships", "stations"));
+        $seats = Seat::get();
+        return view('admin.ticket.create', compact("ships", "stations", "seats"));
     }
 
     public function store(Request $request)
@@ -25,12 +27,16 @@ class TicketController extends Controller
             "first_name" => "required",
             "last_name" => "required",
             "passport_number" => "required",
-            "address" => "required",
+            "address" => "nullable",
             "departure_date" => "required",
             "ship" => "required|exists:ships,id",
-            "station" => "required|exists:stations,id"
+            "station" => "required|exists:stations,id",
+            "price" => "required",
+            "seat_class" => "required"
         ]);
 
+        for ($i = 0; $i > 10; $i++) {
+        }
         $ticket = new Customer;
         $ticket->first_name = $request->first_name;
         $ticket->last_name = $request->last_name;
@@ -42,6 +48,8 @@ class TicketController extends Controller
         $ticket->ticket_station = $request->station;
         $ticket->ship = $request->ship;
         $ticket->status = "booked";
+        $ticket->price = $request->price;
+        $ticket->seat_class = $request->seat_class;
         $ticket->uuid = \Str::uuid(); //$request->uuid;
 
         try {
@@ -65,11 +73,55 @@ class TicketController extends Controller
     public function search(Request $request)
     {
 
-        $ticket = Customer::where('serial_number', strtoupper($request->serial_number))->latest()->first();
-        return view('admin.search.search-result', compact("ticket"));
+        $tickets = Customer::with(["ship", 'seat'])->where('departure_date', date("Y-m-d"))->latest()->get();
+        return view('admin.search.search-result', compact("tickets"));
     }
 
-    public function checkIn()
+    public function checkInCreate()
     {
+        return view('admin.search.boarding');
+    }
+
+    public function checkTicket(Request $request)
+    {
+        $request->validate([
+            "qrReader" => "required"
+        ]);
+
+        // check 
+        $customer = Customer::where("uuid", $request->qrReader)->orWhere('serial_number', $request->qrReader)->first();
+
+
+        if ($customer) {
+            $today = \Carbon\Carbon::now();
+            $ticket_date_parse = \Carbon\Carbon::parse($customer->departure_date);
+            if ($ticket_date_parse->isToday()) {
+
+                if ($customer->status != "booked") {
+                    return response([
+                        "success" => false,
+                        "message" => "Ticket has been " . ucwords($customer->status)
+                    ]);
+                }
+                // update ticket
+                $customer->status = "used";
+                $customer->ticket_updated_by = auth()->id();
+                $customer->save();
+                return response([
+                    "success" => true,
+                    "message" => "Check-In Success"
+                ]);
+            } else {
+                return response([
+                    "success" => false,
+                    "message" => "Please check your departure date."
+                ]);
+            }
+        }
+
+        return response([
+            "success" => false,
+            "message" => "Ticket Not Found"
+        ]);
     }
 }

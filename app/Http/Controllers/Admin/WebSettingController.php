@@ -26,13 +26,19 @@ class WebSettingController extends Controller
         $settings = WebSetting::get();
         if ($request->hasFile("main_logo")) {
             // upload main logo.
-            $settings->where("name", "logo")->first()->value = asset(Storage::putFile('website', $request->main_logo->path()));
-            $settings->where('name', 'logo')->first()->save();
+            $this->set_upload_path("website");
+            if ($request->main_logo->path()) {
+                $settings->where("name", "logo")->first()->value = asset($this->upload("main_logo"));
+                $settings->where('name', 'logo')->first()->save();
+            }
         }
 
         if ($request->hasFile("favicon")) {
-            $settings->where("name", "favicon")->first()->value = asset(Storage::putFile('website', $request->favicon->path()));
-            $settings->where('name', 'favicon')->first()->save();
+            if ($request->favicon->path()) {
+
+                $settings->where("name", "favicon")->first()->value = asset(Storage::putFile('website', $request->favicon->path()));
+                $settings->where('name', 'favicon')->first()->save();
+            }
         }
         $settings->where('name', 'cache')->first()->value = ($request->cache == "on") ? true : (($request->cache == "off") ? false : $settings->where('name', 'cache')->first()->value);
         $settings->where('name', 'login')->first()->value = ($request->login == "on") ? true : (($request->login == "off") ? false : $settings->where('name', 'login')->first()->value);

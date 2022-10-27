@@ -60,7 +60,10 @@
         {{-- back to top button --}}
         <x-back-to-top />
         {{-- back to top button --}}
+        @auth
 
+        @include("frontend.layouts.navigation")
+        @endauth
         @yield('content')
 
     </main>
