@@ -27,6 +27,11 @@ Route::prefix("upschool/admin")
 
 
         Route::get("dashboard", function () {
+
+            if (!auth()->check()) {
+                return redirect()->route('login');
+            }
+
             if (auth()->user()->role == 2) {
                 return redirect()->route('admin.ticket.create');
             } elseif (auth()->user()->role == 3) {
