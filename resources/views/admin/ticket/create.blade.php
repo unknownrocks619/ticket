@@ -290,9 +290,9 @@
                     <div class="col-md-8 mt-3">
                         <div class="form-group">
                             <strong>
-                                Address
+                                Nationality
                             </strong>
-                            <textarea name="address" id="address" class="form-control py-3" placeholder="Passenger Address">{{ old('address') }}</textarea>
+                            <textarea name="address" id="address" class="form-control py-3" placeholder="Passenger Nationality">{{ old('address') }}</textarea>
                         </div>
                     </div>
                     <div class="col-md-6 mt-3">

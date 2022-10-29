@@ -16,97 +16,97 @@
             <div class="row ">
                 <div class="col-md-12">
                     <div class="bg-white pt-3  dynamic-padding" style="height:100%">
-                        <h4 class="mb-0" style="color: red !important;font-weight:700;line-height:42px;">All Tickets</h4>
+                        <h4 class="mb-0" style="color: red !important;font-weight:700;line-height:42px;">Ship Information</h4>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <form action="" method="get">
-                        <div class="row">
-                            <div class="col-md-4 mb-4">
-                                <input type="search" placeholder="Search by ticket number" name="ticket_number" id="ticket_number" class="form-control" />
+                <form action="{{ route('admin.seat.update',$seat->id) }}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    @method("PUT")
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <a class="btn btn-secondary" href="{{ route('admin.seat.index') }}">
+                                        <x-arrow-left>Go Back</x-arrow-left>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="col-md-4 mb-4">
-                                <input type="date" placeholder="Search by date" name="departure_date" id="departure_date" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <x-flash></x-flash>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label-control">
+                                                    Seat Name / Number
+                                                    <sup class="text-danger">*</sup>
+                                                </label>
+                                                <input type="text" value="{{ old('seat_name',$seat->seat_name) }}" name="seat_name" id="seat_name" class="form-control @error('seat_name') border border-danger @enderror py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-12">
+                                            <label for="price_per_seat" class="label-control">
+                                                Price Per Seat
+                                            </label>
+                                            <input type="text" name="price_for_seat" value="{{ old('price_for_seat',$seat->price_for_seat) }}" id="price_per_seat" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-outline-info">Search Ticket</button>
-                            </div>
-                            <div class="col-md-2">
-                                @if(request()->ticket_number || request()->departure_date)
-                                <a href="{{ route('admin.ticket.search') }}" class="btn btn-outline-danger">Clear Filter</a>
-                                @endif
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-primary">
+                                        Update Seat Information
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="col-md-12 bg-light">
-                    <x-flash></x-flash>
-                    <table class="table table-bordered py-5 table-hover" id="users">
-                        <thead>
-                            <tr>
-                                <th>Departure Date</th>
-                                <th>Customer name</th>
-                                <th>Ship Info</th>
-                                <th>Country</th>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($tickets as $ticket)
-                            <tr>
-                                <td>
-                                    {{ $ticket->departure_date }}
-                                </td>
-                                <td>
-                                    {{ $ticket->first_name }}
-                                    {{ $ticket->last_name }}
-                                    <br />
-                                    <span class="text-info">Ticket Number: {{ $ticket->serial_number }}</span>
-                                    <br />
-                                </td>
-                                <td>
-                                    @if($ticket->ship)
-                                    Ship: {{-- $ticket->ship->ship_number --}}
-                                    @endif
-                                    <br />
-                                    Seat: {{ $ticket->seat_class }}
-                                    <br />
-
-                                </td>
-                                <td>
-                                    {{ $ticket->country }}
-                                </td>
-                                <td>
-                                    @if($ticket->ticket_updated_by)
-                                    <span class="text-success">
-                                        Checked In
-                                    </span>
-                                    @else
-                                    <span class="text-info">
-                                        Pending
-                                    </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if( ! $ticket->ticket_updated_by)
-                                    <a href="{{ route('admin.ticket.check_in_ticket') }}">Check In</a>
-                                    @else
-                                    Boarded
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
 
     </div>
 </div>
+
+<x-modal modal="addShip">
+    <form action="{{ route('admin.seat.store') }}" method="post">
+        @csrf
+        <div class="modal-header bg-light">
+            <h5 class="modal-title">Add Seat Information</h5>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            Seat name
+                            <sup class="text-danger">*</sup>
+                        </strong>
+                        <input type="text" name="seat_name" id="seat_name" class="form-control py-3" />
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            Price per Seat
+                        </strong>
+                        <input type="text" name="seat_price" id="seat_price" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add Seat Information</button>
+        </div>
+    </form>
+</x-modal>
 @endsection
 
 @push("custom_scripts")

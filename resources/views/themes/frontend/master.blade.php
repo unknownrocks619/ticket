@@ -51,7 +51,7 @@
 
     @stack("custom_css")
 
-    <title>Upscool @yield('page_title')</title>
+    <title>Africa Shipping Compay:: @yield('page_title')</title>
 </head>
 
 <body>

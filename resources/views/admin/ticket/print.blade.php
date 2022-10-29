@@ -189,7 +189,7 @@
 
 @section("content")
 
-<div class="container  mb-11 mx-auto px-0">
+<div class="container-fluid  mb-11 mx-auto px-0">
     <div class="row px-0 mx-auto">
         <!-- Row -->
         <div class="col-md-12 pl-0 ml-0 mx-auto step-parent pb-5">
@@ -204,24 +204,10 @@
             </div>
 
             <!-- Form -->
-            <form action="" enctype="multipart/form-data" method="post">
-                @csrf
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <iframe id="print_area" class="w-100" style="min-height:500px;" src="{{ route('admin.ticket.print',$ticket->uuid) }}" title="print-ticket" </iframe>
-                    </div>
-
-                </div>
-            </form>
+            <iframe id="print_area" class="w-100" style="min-height:900px;" src="{{ route('admin.ticket.print',$ticket->uuid) }}" title="print-ticket" scrolling="no"></iframe>
             <!-- / Form -->
         </div>
 
     </div>
 </div>
 @endsection
-
-@push("custom_scripts")
-<script src="https://www.google.com/recaptcha/api.js?render={{ config('captcha.google.site_key') }}"></script>
-
-@endpush

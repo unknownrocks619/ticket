@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
  */
 Route::name('frontend.')->middleware(["auth"])->group(function () {
     Route::get("dashboard", function () {
-        return view("admin.dashboard");
+        return redirect()->route('admin.dashboard');
+        // return view("admin.dashboard");
     })->name("dashboard");
 
     /**
@@ -112,7 +113,7 @@ Route::name('frontend.')->group(function () {
  * Public Group
  */
 Route::name('frontend.')->group(function () {
-    Route::get("/", [HomeController::class, "index"])->name("home");
+    Route::get("/", fn () =>  redirect()->route('admin.dashboard'))->name("home");
     Route::get("/book/{slug}", [BookController::class, "show"])->name("book.show");
     Route::get("/{slug}/{model?}", [HomeController::class, "detail"])->name('view');
 });

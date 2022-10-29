@@ -16,97 +16,99 @@
             <div class="row ">
                 <div class="col-md-12">
                     <div class="bg-white pt-3  dynamic-padding" style="height:100%">
-                        <h4 class="mb-0" style="color: red !important;font-weight:700;line-height:42px;">All Tickets</h4>
+                        <h4 class="mb-0" style="color: red !important;font-weight:700;line-height:42px;">Ship Information</h4>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <form action="" method="get">
-                        <div class="row">
-                            <div class="col-md-4 mb-4">
-                                <input type="search" placeholder="Search by ticket number" name="ticket_number" id="ticket_number" class="form-control" />
-                            </div>
-                            <div class="col-md-4 mb-4">
-                                <input type="date" placeholder="Search by date" name="departure_date" id="departure_date" class="form-control" />
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-outline-info">Search Ticket</button>
-                            </div>
-                            <div class="col-md-2">
-                                @if(request()->ticket_number || request()->departure_date)
-                                <a href="{{ route('admin.ticket.search') }}" class="btn btn-outline-danger">Clear Filter</a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-12 bg-light">
                     <x-flash></x-flash>
-                    <table class="table table-bordered py-5 table-hover" id="users">
-                        <thead>
-                            <tr>
-                                <th>Departure Date</th>
-                                <th>Customer name</th>
-                                <th>Ship Info</th>
-                                <th>Country</th>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($tickets as $ticket)
-                            <tr>
-                                <td>
-                                    {{ $ticket->departure_date }}
-                                </td>
-                                <td>
-                                    {{ $ticket->first_name }}
-                                    {{ $ticket->last_name }}
-                                    <br />
-                                    <span class="text-info">Ticket Number: {{ $ticket->serial_number }}</span>
-                                    <br />
-                                </td>
-                                <td>
-                                    @if($ticket->ship)
-                                    Ship: {{-- $ticket->ship->ship_number --}}
-                                    @endif
-                                    <br />
-                                    Seat: {{ $ticket->seat_class }}
-                                    <br />
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <a class="btn btn-secondary mb-3" href="#" data-bs-toggle='modal' data-bs-target='#addShip'>
+                            <x-plus>Add Seat Information </x-plus>
+                        </a>
+                        <table class="table-bordered table">
+                            <thead>
+                                <tr>
+                                    <th>Seat Name / Number</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($seats as $seat)
+                                <tr>
+                                    <td>{{ $seat->seat_name}}</td>
+                                    <td>
+                                        {{ $seat->price_for_seat }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.seat.edit',$seat->id) }}" class="btn btn-outline-primary btn-xs">
+                                            <x-pencil>Edit</x-pencil>
+                                        </a>
+                                        <form onsubmit="return confirm('Are you sure ? This action cannot be undone. All customer record related with this seat will be returned null')" class="d-inline" action="{{ route('admin.seat.destroy',$seat->id) }}" method="post">
+                                            @csrf
+                                            @method("DELETE")
+                                            <button type="submit" class="btn btn-outline-danger btn-xs">
+                                                <x-trash>Delete</x-trash>
+                                            </button>
+                                        </form>
+                                    </td>
 
-                                </td>
-                                <td>
-                                    {{ $ticket->country }}
-                                </td>
-                                <td>
-                                    @if($ticket->ticket_updated_by)
-                                    <span class="text-success">
-                                        Checked In
-                                    </span>
-                                    @else
-                                    <span class="text-info">
-                                        Pending
-                                    </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if( ! $ticket->ticket_updated_by)
-                                    <a href="{{ route('admin.ticket.check_in_ticket') }}">Check In</a>
-                                    @else
-                                    Boarded
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td class="text-center text-muted" colspan="3">
+                                        Record not found
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+
+<x-modal modal="addShip">
+    <form action="{{ route('admin.seat.store') }}" method="post">
+        @csrf
+        <div class="modal-header bg-light">
+            <h5 class="modal-title">Add Seat Information</h5>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            Seat name
+                            <sup class="text-danger">*</sup>
+                        </strong>
+                        <input type="text" name="seat_name" id="seat_name" class="form-control py-3" />
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            Price per Seat
+                        </strong>
+                        <input type="text" name="seat_price" id="seat_price" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add Seat Information</button>
+        </div>
+    </form>
+</x-modal>
 @endsection
 
 @push("custom_scripts")

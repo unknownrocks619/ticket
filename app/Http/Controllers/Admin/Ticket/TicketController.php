@@ -8,6 +8,7 @@ use App\Models\Seat;
 use App\Models\Ship;
 use App\Models\Station;
 use Illuminate\Http\Request;
+use Symfony\Component\Finder\Iterator\CustomFilterIterator;
 
 class TicketController extends Controller
 {
@@ -51,6 +52,7 @@ class TicketController extends Controller
         $ticket->price = $request->price;
         $ticket->seat_class = $request->seat_class;
         $ticket->uuid = \Str::uuid(); //$request->uuid;
+        $ticket->country = $request->address;
 
         try {
             $ticket->save();
@@ -73,7 +75,21 @@ class TicketController extends Controller
     public function search(Request $request)
     {
 
-        $tickets = Customer::with(["ship", 'seat'])->where('departure_date', date("Y-m-d"))->latest()->get();
+        $ticket = Customer::with(["ship", "seat"]);
+
+        if ($request->ticket_number) {
+            $ticket->where("serial_number", $request->ticket_number);
+            if ($request->departure_date) {
+                $ticket->where('departure_date', $request->departure_date);
+            }
+        } elseif (!$request->ticket_number && $request->departure_date) {
+            $ticket->where('departure_date', $request->departure_date);
+        } elseif (auth()->user()->role == 1) {
+        } else {
+            $ticket->where('departure_date', date("Y-m-d"));
+        }
+
+        $tickets = $ticket->latest()->get();
         return view('admin.search.search-result', compact("tickets"));
     }
 

@@ -20,6 +20,7 @@ class SeatController extends Controller
         //
         $seats = Seat::get();
         $ships = Ship::get();
+        return view('admin.seats.index_updated', compact('seats', "ships"));
         return view('admin.seats.index', compact('seats', "ships"));
     }
 
@@ -75,6 +76,7 @@ class SeatController extends Controller
     {
         //
         return view('admin.seats.edit', compact("seat"));
+        return view('admin.seats.edit', compact("seat"));
     }
 
     /**
@@ -85,6 +87,7 @@ class SeatController extends Controller
      */
     public function edit(Seat $seat)
     {
+        return view('admin.seats.edit_updated', compact('seat'));
         return view('admin.seats.edit', compact('seat'));
     }
 

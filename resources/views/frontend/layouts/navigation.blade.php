@@ -7,7 +7,7 @@
             <div class="container p-0">
                 <div class="header-left">
                     <div>
-                        <a href="{{ route('frontend.home') }}">
+                        <a href="{{ route('admin.dashboard') }}">
                             <img src="{{ asset(settings('logo')) }}" alt="{{ settings('website_name') }}" height="30" />
                         </a>
                     </div>

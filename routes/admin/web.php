@@ -27,6 +27,13 @@ Route::prefix("upschool/admin")
 
 
         Route::get("dashboard", function () {
+            if (auth()->user()->role == 2) {
+                return redirect()->route('admin.ticket.create');
+            } elseif (auth()->user()->role == 3) {
+                return redirect()->route('admin.ticket.check_in_ticket');
+            } elseif (auth()->user()->role == 1) {
+                return redirect()->route('admin.ticket.search', ['departure_date' => date("Y-m-d")]);
+            }
             return view("admin.dashboard");
         })->name('dashboard');
 

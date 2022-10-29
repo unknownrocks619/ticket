@@ -17,6 +17,7 @@ class ShipController extends Controller
     {
         //
         $ships = Ship::latest()->get();
+        return view('admin.ship.index_updated', compact('ships'));
         return view('admin.ship.index', compact('ships'));
     }
 
@@ -77,6 +78,7 @@ class ShipController extends Controller
     public function edit(Ship $ship)
     {
         //
+        return view('admin.ship.edit_updated', compact("ship"));
         return view('admin.ship.edit', compact("ship"));
     }
 

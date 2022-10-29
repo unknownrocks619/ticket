@@ -17,6 +17,7 @@ class StationController extends Controller
     {
         //
         $stations = Station::latest()->get();
+        return view('admin.stations.index_updated', compact('stations'));
         return view('admin.stations.index', compact('stations'));
     }
 
@@ -75,6 +76,7 @@ class StationController extends Controller
     public function edit(Station $station)
     {
         //
+        return view('admin.stations.edit_updated', compact('station'));
         return view('admin.stations.edit', compact('station'));
     }
 

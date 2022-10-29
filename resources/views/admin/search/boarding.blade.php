@@ -55,7 +55,6 @@
             </form>
             <!-- / Form -->
         </div>
-
     </div>
 </div>
 @endsection
@@ -63,29 +62,30 @@
 @push("custom_scripts")
 
 <!-- <script src="https://raw.githubusercontent.com/mebjas/html5-qrcode/master/minified/html5-qrcode.min.js"></script> -->
-<script src="https://unpkg.com/html5-qrcode"></script>
+<!--<script src="https://unpkg.com/html5-qrcode"></script>-->
+<script src="{{asset('admin/assets/js/scanner.js')}}"></script>
 <script type="text/javascript">
-    function onScanSuccess(decodedText, decodedResult) {
-        $("#message").empty().removeClass("alert alert-danger fs-3 text-center");
-        $("#message").empty().removeClass("alert alert-success fs-3 text-center");
-        // handle the scanned code as you like, for example:
-        $.ajax({
-            type: "post",
-            url: "{{ route('admin.ticket.check_in_ticket') }}",
-            dataType: 'json',
-            data: "qrReader=" + decodedText,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if (response.success) {
-                    $("#message").removeClass("alert alert-danger fs-3 text-center").addClass("alert alert-success fs-3 text-center").html(response.message);
-                } else {
-                    $("#message").removeClass("alert alert-success fs-3 text-center").addClass("alert alert-danger fs-3 text-center").html(response.message);
-                }
-            }
-        })
-    }
+    // function onScanSuccess(decodedText, decodedResult) {
+    //     $("#message").empty().removeClass("alert alert-danger fs-3 text-center");
+    //     $("#message").empty().removeClass("alert alert-success fs-3 text-center");
+    //     // handle the scanned code as you like, for example:
+    //     $.ajax({
+    //         type: "post",
+    //         url: "{{-- route('admin.ticket.check_in_ticket') --}}",
+    //         dataType: 'json',
+    //         data: "qrReader=" + decodedText,
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(response) {
+    //             if (response.success) {
+    //                 $("#message").removeClass("alert alert-danger fs-3 text-center").addClass("alert alert-success fs-3 text-center").html(response.message);
+    //             } else {
+    //                 $("#message").removeClass("alert alert-success fs-3 text-center").addClass("alert alert-danger fs-3 text-center").html(response.message);
+    //             }
+    //         }
+    //     })
+    // }
 
     function onScanFailure(error) {
         // handle scan failure, usually better to ignore and keep scanning.
@@ -105,17 +105,17 @@
         }
     });
 
-    let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", {
-            fps: 10,
-            qrbox: {
-                width: 250,
-                height: 250
-            }
-        },
-        /* verbose= */
-        false);
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    // let html5QrcodeScanner = new Html5QrcodeScanner(
+    //     "reader", {
+    //         fps: 10,
+    //         qrbox: {
+    //             width: 250,
+    //             height: 250
+    //         }
+    //     },
+    //     /* verbose= */
+    //     false);
+    // html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
 
 <script type="text/javascript">
@@ -141,5 +141,32 @@
             }
         })
     })
+
+
+    $(window).ready(function() {
+
+        //$("#bCode").scannerDetection();
+
+        console.log('all is well');
+        var applied = false;
+        $(window).scannerDetection();
+        $(window).bind('scannerDetectionComplete', function(e, data) {
+                // console.log('complete '+data.string);
+                // $("#bCode").val(data.string);
+            })
+            .bind('scannerDetectionError', function(e, data) {
+
+                let handHeldScanner = data.string;
+                if (handHeldScanner.toString().length == 36) {
+                    $("#bar_code").val(handHeldScanner.toString());
+                    $("form#ticketScanner").submit();
+                }
+            })
+            .bind('scannerDetectionReceive', function(e, data) {
+                // console.log('Recieve');
+                // console.log(data.evt.which);
+            })
+    });
+    //$(window).scannerDetection('success');
 </script>
 @endpush
