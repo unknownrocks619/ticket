@@ -213,6 +213,14 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <a href="{{ route('admin.ticket.search',['departure_date'=>date('Y-m-d')]) }}" class="btn btn-outline-danger">
+                        Go Back
+                    </a>
+                </div>
+            </div>
+
             <!-- Form -->
             <?php
             // if (settings("print_paper") == 'ticket-paper') {

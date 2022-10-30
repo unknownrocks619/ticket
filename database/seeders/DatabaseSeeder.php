@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         /**
          * Role Settings
          */
@@ -33,8 +32,19 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
         Role::factory()->create([
-            "role_name" => "stations",
-            "slug" => "stations",
+            "role_name" => "Ticket Issuer",
+            "slug" => "ticket_issuer",
+            "default" => false,
+            "permissions" => [
+                "modules" => [
+                    "Teacher" => "CRUD",
+                    "Student" => "CRUD",
+                ]
+            ]
+        ]);
+        Role::factory()->create([
+            "role_name" => "Boarding Pass Checker",
+            "slug" => "boarding_pass_checker",
             "default" => false,
             "permissions" => [
                 "modules" => [
@@ -113,7 +123,7 @@ class DatabaseSeeder extends Seeder
         ]);
         WebSetting::factory()->create([
             "name" => "website_url",
-            "value" => "https://ticket.dev.org",
+            "value" => "http://ticket-management.local",
             "created_at" => Carbon::now(),
             "updated_at" => Carbon::now()
         ]);
@@ -168,6 +178,12 @@ class DatabaseSeeder extends Seeder
         WebSetting::factory()->create([
             "name" => "pre_registration",
             "value" => false,
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+        WebSetting::factory()->create([
+            "name" => "print_paper",
+            "value" => "white-paper",
             "created_at" => Carbon::now(),
             "updated_at" => Carbon::now()
         ]);

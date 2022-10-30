@@ -52,7 +52,7 @@ $boarding_copy = "BOARDING COPY";
                             </div>
                         </div>
                         <p class="mb-0 fs-5 text-center">
-                            <strong>{{ $office_copy }}</strong>
+                            <strong>{{-- $office_copy --}}</strong>
                         </p>
                         <p class="text-start mt-0 ps-2 text-muted" style="font-size:12px ;">
                             {{ $notice }}
@@ -268,7 +268,7 @@ $boarding_copy = "BOARDING COPY";
                                 {{ settings("website_name") }}
                             </h6>
                         </div>
-                        <div class="row">
+                        <div class="row text-center">
                             <div class="col-md-8" style="font-size:12px !important;">
                                 <p class="mt-0 mb-0">{{ settings('company_address') }}</p>
                                 <p class="mt-0 mb-0">

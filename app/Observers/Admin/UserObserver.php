@@ -42,13 +42,6 @@ class UserObserver
     public function deleted(User $user)
     {
         //
-        if ($user->organisations) {
-            $user->organisations()->delete();
-        }
-
-        if ($user->courses) {
-            $user->courses()->delete();
-        }
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends("themes.frontend.master")
 
 @section("page_title")
-::Register
+:: Customer List
 @endsection
 
 
@@ -48,6 +48,15 @@
                             <tr>
                                 <th>Departure Date</th>
                                 <th>Customer name</th>
+                                @if(auth()->user()->role == 1)
+                                <th>
+                                    Nationality
+                                </th>
+                                <th>
+                                    ID Card Number
+                                </th>
+                                <th>Duty Staff</th>
+                                @endif
                                 <th>Ship Info</th>
                                 <th>Country</th>
                                 <th>Status</th>
@@ -67,9 +76,28 @@
                                     <span class="text-info">Ticket Number: {{ $ticket->serial_number }}</span>
                                     <br />
                                 </td>
+                                @if(auth()->user()->role == 1)
                                 <td>
+                                    {{ $ticket->country }}
+                                </td>
+                                <td>
+                                    {{ $ticket->passport_number }}
+                                </td>
+                                <td>
+                                    @if($ticket->staff)
+                                    {{ $ticket->staff->full_name() }}
+                                    @else
+                                    Not Available
+                                    @endif
+                                </td>
+                                @endif
+
+                                <td>
+                                    Ship:
                                     @if($ticket->ship)
-                                    Ship: {{-- $ticket->ship->ship_number --}}
+                                    {{ $ticket->ship_table->ship_number }}
+                                    @else
+                                    NULL
                                     @endif
                                     <br />
                                     Seat: {{ $ticket->seat_class }}
@@ -92,7 +120,9 @@
                                 </td>
                                 <td>
                                     @if( ! $ticket->ticket_updated_by)
-                                    <a href="{{ route('admin.ticket.check_in_ticket') }}">Check In</a>
+                                    <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.ticket.check_in_ticket') }}">Check In</a>
+                                    <a class="btn btn-outline-info btn-sm" href="{{ route('admin.ticket.print_display',$ticket->uuid) }}">Re-print Ticket</a>
+
                                     @else
                                     Boarded
                                     @endif
@@ -111,16 +141,24 @@
 
 @push("custom_scripts")
 <script src="{{ asset('jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('jszip.min.js') }}"></script>
+<script src="{{ asset('buttons.html5.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#users').DataTable();
+        $('#users').DataTable({
+            dom: 'Bfrtip',
+            "buttons": [
+                'excel'
+            ]
+        });
     });
 </script>
 @endpush
 
 
 @push("custom_css")
-<link rel="stylesheet" href="{{ asseet ('jquery.dataTables.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('jquery.dataTables.min.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
@@ -140,6 +178,13 @@
         font-weight: 400;
         line-height: 23px;
         font-size: 19px;
+    }
+
+    .dt-button {
+        padding: 10px;
+        border: 1px solid red;
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .dynamic-padding {

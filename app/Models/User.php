@@ -56,14 +56,6 @@ class User extends Authenticatable
         return $this->hasOne(Role::class, "id", "role");
     }
 
-    public function organisations()
-    {
-        return $this->belongsToMany(Organisation::class, 'organisation_students')->where("organisation_students.active", true);
-    }
-    public function organisation_student()
-    {
-        return $this->hasOne(OrganisationStudent::class, 'user_id');
-    }
 
     public function full_name()
     {

@@ -1,21 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\Course\ChapterController;
-use App\Http\Controllers\Admin\Course\CourseController;
-use App\Http\Controllers\Admin\Course\LessionController;
-use App\Http\Controllers\Admin\Ecommerce\ProductController;
-use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\Organisation\OrganisationController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\Post\PostController;
 use App\Http\Controllers\Admin\ShipController;
 use App\Http\Controllers\Admin\StationController;
 use App\Http\Controllers\Admin\Ticket\SeatController;
 use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\BookUploadController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\User\UserController as Users;
+use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\WidgetController;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +21,6 @@ Route::prefix("upschool/admin")
             if (!auth()->check()) {
                 return redirect()->route('login');
             }
-
             if (auth()->user()->role == 2) {
                 return redirect()->route('admin.ticket.create');
             } elseif (auth()->user()->role == 3) {
@@ -53,6 +42,7 @@ Route::prefix("upschool/admin")
                 Route::post("check-in", 'checkTicket')->name("check_in_ticket");
                 Route::get('/new', "create")->name("create");
                 Route::get('/print/{ticket}', "printableTicket")->name("print");
+                Route::get('/re-print/{ticket}', "ticketDisplay")->name("print_display");
                 Route::get("/search", "search")->name('search');
                 Route::post("/new", "store")->name("store");
             });
@@ -85,9 +75,9 @@ Route::prefix("upschool/admin")
 
         Route::prefix("users")
             ->name("users.")
-            ->controller(Users::class)
+            ->controller(UserController::class)
             ->group(function () {
                 Route::patch("/ban/{user}", "banUser")->name("user.ban");
-                Route::resource("user", Users::class);
+                Route::resource("user", UserController::class);
             });
     });

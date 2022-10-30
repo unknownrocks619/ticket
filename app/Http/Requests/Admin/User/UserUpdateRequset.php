@@ -13,7 +13,7 @@ class UserUpdateRequset extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return (auth()->check() && auth()->user()->role == 1) ? true : false;
     }
 
     /**

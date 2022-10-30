@@ -17,7 +17,7 @@ class WebSettingController extends Controller
     public function index()
     {
         $settings = settings();
-        return view("admin.web_settings.index", compact("settings"));
+        return view("admin.web_settings.index_updated", compact("settings"));
     }
 
     public function Update(Request $request)
@@ -32,7 +32,6 @@ class WebSettingController extends Controller
                 $settings->where('name', 'logo')->first()->save();
             }
         }
-
         if ($request->hasFile("favicon")) {
             if ($request->favicon->path()) {
 
@@ -50,6 +49,7 @@ class WebSettingController extends Controller
         $settings->where('name', 'main_contact')->first()->value = ($request->main_contact) ? $request->main_contact : $settings->where('name', "main_contact")->first()->value;
         $settings->where('name', "website_url")->first()->value = ($request->website_url) ? $request->website_url : ((env("APP_DEBUG")) ? "localhost:8000" : "https://upschool.co");
         $settings->where('name', "official_email")->first()->value = ($request->official_email) ? $request->official_email : $settings->where('name', "official_email")->first()->value;
+        $settings->where('name', "print_paper")->first()->value = ($request->print_paper) ? $request->print_paper : $settings->where('name', "print_paper")->first()->value;
         $settings->where('name', "company_address")->first()->value = ($request->company_address) ? $request->company_address : $settings->where('name', "company_address")->first()->value;
         if ($settings->where('name', 'website_name')->first()->isDirty()) {
             $settings->where('name', 'website_name')->first()->save();
@@ -96,6 +96,9 @@ class WebSettingController extends Controller
         }
         if ($settings->where('name', 'main_contact')->first()->isDirty()) {
             $settings->where('name', 'main_contact')->first()->save();
+        }
+        if ($settings->where('name', 'print_paper')->first()->isDirty()) {
+            $settings->where('name', 'print_paper')->first()->save();
         }
         session()->flash('success', "Setting Updated.");
         return back();

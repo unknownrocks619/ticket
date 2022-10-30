@@ -112,7 +112,7 @@
 @endsection
 
 @push("custom_scripts")
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="{{ asset ('jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#users').DataTable();
@@ -122,7 +122,7 @@
 
 
 @push("custom_css")
-<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ asset ('jquery.dataTables.min.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">

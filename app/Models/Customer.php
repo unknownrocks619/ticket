@@ -18,13 +18,18 @@ class Customer extends Model
         return $this->belongsTo(Station::class, "ticket_station");
     }
 
-    public function ship()
+    public function ship_table()
     {
         return $this->belongsTo(Ship::class, "ship");
     }
 
-    public function seat()
+    public function seat_table()
     {
         return $this->belongsTo(Seat::class, "seat_class");
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, "ticket_by");
     }
 }

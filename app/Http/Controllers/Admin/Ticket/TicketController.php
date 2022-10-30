@@ -67,15 +67,22 @@ class TicketController extends Controller
         return view('admin.ticket.print', compact("ticket"));
     }
 
+    public function ticketDisplay(Customer $ticket)
+    {
+        return view('admin.ticket.reprint', compact("ticket"));
+    }
+
     public function printableTicket(Customer $ticket)
     {
-        return view('admin.ticket.print-content', compact('ticket'));
+        $print = settings("print_paper");
+        // dd($print);
+        return view('admin.ticket.' . $print, compact('ticket'));
     }
 
     public function search(Request $request)
     {
 
-        $ticket = Customer::with(["ship", "seat"]);
+        $ticket = Customer::with(["ship_table", "seat_table"]);
 
         if ($request->ticket_number) {
             $ticket->where("serial_number", $request->ticket_number);

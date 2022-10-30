@@ -12,7 +12,7 @@ use App\Models\Corcel\WpUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,8 +20,44 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::withCount(["organisations", "courses"])->with(["organisations", "courses", "user_role"])->get();
-        return view('admin.users.index', compact('users'));
+        $users = User::with(["user_role"])->get();
+        return view('admin.users.index_updated', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            "first_name" => "required",
+            "last_name" => "required",
+            "email" => "required|email",
+            "password" => "required",
+            "role" => "required"
+        ]);
+
+
+        $user = new User();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->source = "signup";
+        $user->username = \Str::random(8);
+        $user->password = Hash::make($request->password);
+        $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->gender = ($request->gender) ? $request->gender : "male";
+        $user->phone_number = $request->phone_number;
+        $user->role = $request->role;
+        $user->email = $request->email;
+
+        try {
+            $user->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th->getMessage());
+            session()->flash('error', "Error: " . $th->getMessage());
+            return back();
+        }
+
+        session()->flash("success", "Staff Added.");
+        return back();
     }
 
     public function wp_index()
@@ -37,6 +73,36 @@ class UserController extends Controller
 
     public function update(UserUpdateRequset $request, User $user)
     {
+        $request->validate([
+            "first_name" => "required",
+            "last_name" => "required",
+            "email" => "required|email",
+            "role" => "required"
+        ]);
+
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->source = "signup";
+        $user->username = \Str::random(8);
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->gender = ($request->gender) ? $request->gender : "male";
+        $user->phone_number = $request->phone_number;
+        $user->role = $request->role;
+        $user->email = $request->email;
+
+        try {
+            $user->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th->getMessage());
+            session()->flash('error', "Error: " . $th->getMessage());
+            return back();
+        }
+
+        session()->flash("success", "Staff Updated.");
+        return back();
     }
 
     /**
@@ -64,12 +130,6 @@ class UserController extends Controller
         // remove user from course and organisation
         try {
             DB::transaction(function () use ($user) {
-                if ($user->organisations) {
-                    $user->organisations()->delete();
-                }
-                if ($user->courses) {
-                    $user->courses()->delete();
-                }
 
                 $user->delete();
             });

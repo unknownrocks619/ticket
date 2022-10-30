@@ -13,7 +13,6 @@
         All Tickets
     </a>
 </li>
-
 @if(auth()->user()->user_role->id == 1)
 <li class="nav-item dropdown">
     <a class="nav-link text-white nav-text dropdown-toggle " {{ $attributes }} href="#">
@@ -36,5 +35,16 @@
             </a>
         </li>
     </ul>
+</li>
+
+<li class="nav-item">
+    <a href="{{ route('admin.users.user.index') }}" class="nav-link text-white nav-text">
+        Staffs
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('admin.web.setting.list') }}" class="nav-link text-white nav-text">
+        Management
+    </a>
 </li>
 @endif

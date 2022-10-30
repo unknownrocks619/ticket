@@ -247,8 +247,3 @@
     </div>
 </div>
 @endsection
-
-@push("custom_scripts")
-<script src="https://www.google.com/recaptcha/api.js?render={{ config('captcha.google.site_key') }}"></script>
-
-@endpush

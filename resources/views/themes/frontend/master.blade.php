@@ -9,7 +9,7 @@
 
     <link rel="icon" href="{{ asset('frontend/images/global/favicon.png') }}" sizes="192x192" />
     <!-- bootstrap link -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <link href="{{ asset('bootstrap.min.css') }}" rel="stylesheet" />
     <!-- google font link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +43,7 @@
             color: #fff !important
         }
     </style> <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="{{ asset('upschool/frontend/css/swiper-bundle.min.css') }}" />
     <!-- font icon -->
     <script src="https://kit.fontawesome.com/2f1f0451bd.js" crossorigin="anonymous"></script>
     <!-- custom css -->
@@ -69,9 +69,9 @@
     </main>
 
     <!-- bootsrtap script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="{{ asset('bootstrap.bundle.min.js') }}"></script>
     <!-- bootsrtap script -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('jquery-3.6.0.min.js') }}"></script>
 
     @stack('custom_scripts')
 </body>
